@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=zinemaker
+X-Python-2-Compatible=false
+Name=Zine Maker
+Comment=Utilities to make creating 8-page zines easier :D
