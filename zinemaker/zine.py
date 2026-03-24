@@ -2,6 +2,8 @@ from krita import *
 from math import pi
 
 HELPER_LAYER = "Zine Help Layer commonkestrel_krita_zine_helper"
+HEIGHT = 2550
+WIDTH = 3300
 
 class ZineExtension(Extension):
     def __init__(self, parent):
@@ -22,21 +24,21 @@ class ZineExtension(Extension):
 
     def new_doc(self):
         # Create letter-sized document
-        doc = Krita.instance().createDocument(3300, 2550, "Zine", "RGBA", "U8", "", 300.0)
+        doc = Krita.instance().createDocument(WIDTH, HEIGHT, "Zine", "RGBA", "U8", "", 300.0)
         Krita.instance().setActiveDocument(doc)
 
         # Add guides
         doc.setGuidesVisible(True)
         doc.setGuidesLocked(True)
-        doc.setHorizontalGuides([2550/2])
-        doc.setVerticalGuides([3300/4, 3300/2, 3*3300/4])
+        doc.setHorizontalGuides([HEIGHT/2])
+        doc.setVerticalGuides([WIDTH/4, WIDTH/2, 3*WIDTH/4])
 
         window = Krita.instance().activeWindow()
         view = window.addView(doc)
         window.showView(view)
 
         layer = doc.createNode(HELPER_LAYER, "paintlayer")
-        layer.setPixelData(self.overlay, 0, 0, 3300, 2550)
+        layer.setPixelData(self.overlay, 0, 0, WIDTH, HEIGHT)
 
         root = doc.rootNode()
         root.addChildNode(layer, None)
@@ -48,6 +50,9 @@ class ZineExtension(Extension):
         if doc is None:
             return
         
+        height = doc.height()
+        width = doc.width()
+        
         root = doc.rootNode()
         helpers = root.findChildNodes(HELPER_LAYER)
         nodes = list(map(hide_visible, helpers))
@@ -55,7 +60,7 @@ class ZineExtension(Extension):
         layer = doc.createNode("projection_layer", "paintlayer")
         root.addChildNode(layer, None)
 
-        layer.setPixelData(doc.pixelData(0, 0, 3300, 2550//2), 0, 0, 3300, 2550//2)
+        layer.setPixelData(doc.pixelData(0, 0, width, height//2), 0, 0, width, height//2)
         layer.rotateNode(pi)
 
         Krita.instance().action("file_export_file").trigger()
