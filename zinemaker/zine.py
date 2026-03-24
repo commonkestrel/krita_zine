@@ -1,4 +1,5 @@
 from krita import *
+import zipfile
 from math import pi
 
 HELPER_LAYER = "Zine Help Layer commonkestrel_krita_zine_helper"
@@ -11,9 +12,9 @@ class ZineExtension(Extension):
         super().__init__(parent)
 
     def setup(self):
-        path = Krita.getAppDataLocation() + "/pykrita/zinemaker/overlay"
-        with open(path, "rb") as f:
-            self.overlay = QByteArray(f.read())
+        path = Krita.getAppDataLocation() + "/pykrita/zinemaker/overlay.zip"
+        with zipfile.ZipFile(path, 'r') as zip:
+            self.overlay = QByteArray(zip.read("overlay"))
 
     def createActions(self, window):
         create = window.createAction("zineCreate", "Create New Zine", "tools/scripts")
